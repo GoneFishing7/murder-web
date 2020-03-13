@@ -92,6 +92,8 @@ $(document).ready(function () {
     $(".mode a").on('click', function (e) {
         e.preventDefault(); // Just in case
         mode = $(this).attr("name"); // Get mode
+        $(".mode a").removeClass("active");
+        $(this).addClass("active");
     });
 
     $("#reveal-btn").on('click', function () {
