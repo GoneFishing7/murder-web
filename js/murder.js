@@ -9,7 +9,7 @@ $(document).ready(function () {
     var revealed = false; // Check if current role has been revealed
     const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer'];
     var MIN = POSSIBLE_ROLES.length;
-    var MAX = POSSIBLE_ROLES.length*5;
+    var MAX = POSSIBLE_ROLES.length * 5;
 
     // Initialize roles
     for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
@@ -26,7 +26,6 @@ $(document).ready(function () {
      * Make sure the value entered was valid
      */
     function validateForm() {
-        console.log(numPlayers);
         if (numPlayers < MIN) { // Make sure it isn't too small
             message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
                 MIN + ". 🤓");
@@ -102,28 +101,26 @@ $(document).ready(function () {
                 $(".reveal").prepend("<p class='reveal-msg'>Your role is <span id='role' class='" +
                     rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
                 let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
-                console.log(others);
-                let othersMessage = currentRole == 'Innocent' ? "" :
+                let othersMessage = rolesArr[currentRole] == 'Innocent' ? "" :
                     others.length < 1 ? "" :
                     others.length == 1 ? "The other " + rolesArr[currentRole] + " is " :
                     "The other " + rolesArr[currentRole] + "s are ";
 
-                if (others.length > 2 && currentRole != 'Innocent') {
+                if (others.length > 2) {
                     for (let index = 0; index < others.length - 1; index++) {
                         othersMessage += "Person #" + (others[index] + 1) + ", "
                     }
                     othersMessage += "and ";
-                } else if (others.length == 2 && rolesArr[currentRole] != 'Innocent') {
+                } else if (others.length == 2) {
                     othersMessage += "Person #" + (others[0] + 1) + " and ";
                 }
-                if (others.length >= 1 && rolesArr[currentRole] != 'Innocent') {
-                    othersMessage += "Person #" + (others[others.length - 1] + 1);
+                if (others.length >= 1) {
+                    othersMessage += "Person #" + (others[others.length - 1] + 1) + ".";
                 }
 
-                console.log(othersMessage)
-
                 $("#reveal-lbl").html("☝<br>click this once you've read and memorized it. (Then, let the next person get their role!)" +
-                    "<br>" + othersMessage + ".");
+                    "<br>" + (rolesArr[currentRole] == 'Innocent' ? "" : othersMessage));
+
                 $(this).text("next");
                 revealed = true;
                 currentRole++;
