@@ -8,6 +8,8 @@ $(document).ready(function () {
     var currentRole = 0; // Only for revealing
     var revealed = false; // Check if current role has been revealed
     const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer'];
+    var MIN = POSSIBLE_ROLES.length;
+    var MAX = POSSIBLE_ROLES.length*5;
 
     // Initialize roles
     for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
@@ -16,21 +18,21 @@ $(document).ready(function () {
     }
 
     // Set min and max of form
-    $("#players").attr("min", POSSIBLE_ROLES.length);
-    $("#players").attr("max", POSSIBLE_ROLES.length * 10);
-    $("#players").attr("placeholder", (POSSIBLE_ROLES.length) + "-" + (POSSIBLE_ROLES.length*10));
+    $("#players").attr("min", MIN);
+    $("#players").attr("max", MAX);
+    $("#players").attr("placeholder", MIN + "-" + MAX);
 
     /**
      * Make sure the value entered was valid
      */
     function validateForm() {
         console.log(numPlayers);
-        if (numPlayers < POSSIBLE_ROLES.length) { // Make sure it isn't too small
+        if (numPlayers < MIN) { // Make sure it isn't too small
             message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
-                POSSIBLE_ROLES.length + ". 🤓");
+                MIN + ". 🤓");
             return false;
-        } else if (numPlayers > POSSIBLE_ROLES.length * 10) { // Make sure it isn't too big
-            message("Danger", "Oops!", "Please enter a # of players less than " + (POSSIBLE_ROLES.length * 10) +
+        } else if (numPlayers > MAX) { // Make sure it isn't too big
+            message("Danger", "Oops!", "Please enter a # of players less than " + MAX +
                 ". 😊");
             return false;
         } else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
@@ -98,29 +100,29 @@ $(document).ready(function () {
             if (!revealed) {
                 $(".reveal-msg").remove();
                 $(".reveal").prepend("<p class='reveal-msg'>Your role is <span id='role' class='" +
-                    rolesArr[currentRole].toLowerCase() +"'>" + rolesArr[currentRole] +"</span>!</p>");
+                    rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
                 let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
                 console.log(others);
-                let othersMessage = currentRole == 'Innocent' ? ""
-                                    : others.length < 1 ? "" 
-                                    : others.length == 1 ? "The other " + rolesArr[currentRole] + " is "
-                                    : "The other " + rolesArr[currentRole] + "s are ";
-                
+                let othersMessage = currentRole == 'Innocent' ? "" :
+                    others.length < 1 ? "" :
+                    others.length == 1 ? "The other " + rolesArr[currentRole] + " is " :
+                    "The other " + rolesArr[currentRole] + "s are ";
+
                 if (others.length > 2 && currentRole != 'Innocent') {
-                    for (let index = 0; index < others.length-1; index++) {
-                        othersMessage += "Person #" + (others[index]+1) + ", "
+                    for (let index = 0; index < others.length - 1; index++) {
+                        othersMessage += "Person #" + (others[index] + 1) + ", "
                     }
                     othersMessage += "and ";
                 } else if (others.length == 2 && rolesArr[currentRole] != 'Innocent') {
-                    othersMessage += "Person #" + (others[0]+1) + " and ";
+                    othersMessage += "Person #" + (others[0] + 1) + " and ";
                 }
                 if (others.length >= 1 && rolesArr[currentRole] != 'Innocent') {
-                    othersMessage += "Person #" + (others[others.length-1]+1);
+                    othersMessage += "Person #" + (others[others.length - 1] + 1);
                 }
 
                 console.log(othersMessage)
 
-                $("#reveal-lbl").html("☝<br>click this once you've read and memorized it. (Then, let the next person get their role!)" + 
+                $("#reveal-lbl").html("☝<br>click this once you've read and memorized it. (Then, let the next person get their role!)" +
                     "<br>" + othersMessage + ".");
                 $(this).text("next");
                 revealed = true;
@@ -138,13 +140,13 @@ $(document).ready(function () {
         }
     });
 
-    $("#finish-btn").on('click', function() {
+    $("#finish-btn").on('click', function () {
         $('#finish').remove();
         $("#new-game").removeClass("hidden")
             .attr("hidden", false);
     });
 
-    $("#new-game-btn").on('click', function() {
+    $("#new-game-btn").on('click', function () {
         location.reload();
     });
 
@@ -163,7 +165,7 @@ $(document).ready(function () {
         return a;
     }
 
-    
+
     /**
      * @param  {string} role - The role we're looking for
      * @param  {number} except - The index of the role not wanted
