@@ -20,30 +20,30 @@ $(document).ready(function () {
     $("#players").attr("max", POSSIBLE_ROLES.length * 10);
     $("#players").attr("placeholder", (POSSIBLE_ROLES.length) + "-" + (POSSIBLE_ROLES.length*10));
 
-    /*
+    /**
      * Make sure the value entered was valid
      */
     function validateForm() {
         console.log(numPlayers);
-        if (numPlayers < POSSIBLE_ROLES.length) {
+        if (numPlayers < POSSIBLE_ROLES.length) { // Make sure it isn't too small
             message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
                 POSSIBLE_ROLES.length + ". 🤓");
             return false;
-        } else if (numPlayers > POSSIBLE_ROLES.length * 10) {
+        } else if (numPlayers > POSSIBLE_ROLES.length * 10) { // Make sure it isn't too big
             message("Danger", "Oops!", "Please enter a # of players less than " + (POSSIBLE_ROLES.length * 10) +
                 ". 😊");
             return false;
-        } else if (!numPlayers || !POSSIBLE_ROLES) {
-            message("Warning", "Woah!", "Something went badly wrong! 🐷");
+        } else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
+            message("Warning", "Woah!", "Something went badly wrong! 🐷 ^\_(ツ)_/^");
             return false;
         } else {
             return true;
         }
     }
 
-    /*
+    /**
      * Takes the input (amount of players) and randomly inserts the amount of roles in the roles arr
-     * @param {function} callback - Callback function
+     * @param {object} _callback - Callback function
      */
     function processData(_callback) {
         // Calculate amount of players for each role
@@ -99,7 +99,29 @@ $(document).ready(function () {
                 $(".reveal-msg").remove();
                 $(".reveal").prepend("<p class='reveal-msg'>Your role is <span id='role' class='" +
                     rolesArr[currentRole].toLowerCase() +"'>" + rolesArr[currentRole] +"</span>!</p>");
-                $("#reveal-lbl").html("☝<br>click this once you've read it. (Then, let the next person get their role!)");
+                let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
+                console.log(others);
+                let othersMessage = currentRole == 'Innocent' ? ""
+                                    : others.length < 1 ? "" 
+                                    : others.length == 1 ? "The other " + rolesArr[currentRole] + " is "
+                                    : "The other " + rolesArr[currentRole] + "s are ";
+                
+                if (others.length > 2 && currentRole != 'Innocent') {
+                    for (let index = 0; index < others.length-1; index++) {
+                        othersMessage += "Person #" + (others[index]+1) + ", "
+                    }
+                    othersMessage += "and ";
+                } else if (others.length == 2 && rolesArr[currentRole] != 'Innocent') {
+                    othersMessage += "Person #" + (others[0]+1) + " and ";
+                }
+                if (others.length >= 1 && rolesArr[currentRole] != 'Innocent') {
+                    othersMessage += "Person #" + (others[others.length-1]+1);
+                }
+
+                console.log(othersMessage)
+
+                $("#reveal-lbl").html("☝<br>click this once you've read and memorized it. (Then, let the next person get their role!)" + 
+                    "<br>" + othersMessage + ".");
                 $(this).text("next");
                 revealed = true;
                 currentRole++;
@@ -139,5 +161,22 @@ $(document).ready(function () {
             a[j] = x;
         }
         return a;
+    }
+
+    
+    /**
+     * @param  {string} role - The role we're looking for
+     * @param  {number} except - The index of the role not wanted
+     * @returns {Array} - the indexes for all of the roles in rolesArr matching param 'role' except (if specified) the index except
+     */
+    function getAllOfRoleExcept(role, except) {
+        var found = [];
+        for (let i = 0; i < rolesArr.length; i++) {
+            const r = rolesArr[i];
+            if (r == role && i != except) {
+                found.push(i);
+            }
+        }
+        return found;
     }
 });
