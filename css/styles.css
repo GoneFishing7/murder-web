@@ -1,5 +1,34 @@
+* {
+    font-family: 'Fira Code', monospace;
+}
+
 body {
     padding: 5%;
     align-content: center;
     text-align: center;
+}
+
+label {
+    font-family: 'Indie Flower', cursive;
+    font-size: 20px;
+}
+
+.reveal-msg, .finish-msg {
+    font-size: 24px;
+}
+
+.innocent {
+    color: green;
+}
+
+.murderer {
+    color: red;
+}
+
+.detective {
+    color: blue;
+}
+
+#role {
+    font-weight: 900;
 }

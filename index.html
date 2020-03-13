@@ -9,6 +9,9 @@
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="css/bootstrap.css">
 
+	<!-- Fira Code and Indie Flower -->
+	<link href="https://fonts.googleapis.com/css?family=Fira+Code:300|Indie+Flower&display=swap" rel="stylesheet">
+
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="css/styles.css">
 
@@ -16,18 +19,19 @@
 </head>
 
 <body>
-	<h1>The Murder Mystery Roles Generator</h1>
+	<h1>the murder mystery roles generator.</h1>
+	<hr>
 	<main>
 		<noscript>
 			<p>Yeah, you're gonna want JavaScript enabled... 😁</p>
 		</noscript>
-		<form class="enter-num-players">
-			<br><br>
-			<div class='form-attribute'>
-				<input type="number" id="players" min="1" max="99" placeholder="3-30" value="5">
+		<form role='form' class="enter-num-players form-horizontal" novalidate>
+			<br>
+			<div class='form-group'>
+				<input type="number" id="players" min="1" max="99" placeholder="3-30" value="3">
 				<label for="players"># of players</label>
 			</div>
-			<div class="dropdown">
+			<div class="dropdown from-group">
 				<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
 					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Select Mode!
@@ -36,16 +40,40 @@
 					<a class="dropdown-item" href="#" name="default">Default</a>
 					<a class="dropdown-item" href="#" name="oneSpec">One Special</a>
 				</div>
+			</div><br>
+			<div class='form-group'>
+				<button type="submit" class="btn btn-primary submit">show roles</button>
 			</div>
-			<button type="submit" class="btn btn-primary submit">Show Roles!</button>
 		</form>
+
+		<!-- Hidden on start -->
+		<div class='reveal' hidden>
+			<p class='reveal-msg'><br></p>
+			<button class='btn btn-success' id='reveal-btn'>reveal</button><br>
+			<label id='reveal-lbl' for='reveal-btn'>☝<br>click this to reveal your role!</label>
+		</div>
+
+		<!-- Finished message -->
+		<div id='finish' hidden>
+			<p class='finish-msg'>all players have roles. prepare to start round.</p>
+			<button class='btn btn-success' id='finish-btn'>done</button><br>
+			<label id='finish-lbl' for='finish-btn'>☝<br>click this to finish role assignment!</label>
+		</div>
+
+		<!-- Play again button (hidden until #finish-btn has been presssed)-->
+		<div id='new-game' hidden>
+			<button class='btn btn-success' id='new-game-btn'>new game</button><br>
+			<label id='new-game-lbl' for='new-game-btn'>☝<br>click this to reload assignments and start a new game.</label>
+		</div>
 	</main>
 
 	<!-- jQuery-->
 	<script src="js/jquery-3.4.1.min.js"></script>
 
 	<!-- Popper.js -->
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+	</script>
 	<!-- Bootstrap -->
 	<script src="js/bootstrap.js"></script>
 
@@ -61,6 +89,8 @@
 			var roles = {};
 			var rolesArr = [];
 			var mode = 'default'; // Can be default or oneSpec
+			var currentRole = 0; // Only for revealing
+			var revealed = false; // Check if current role has been revealed
 			const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer'];
 
 			// Initialize roles
@@ -71,17 +101,19 @@
 
 			// Set min and max of form
 			$("#players").attr("min", POSSIBLE_ROLES.length);
-			$("#players").attr("max", POSSIBLE_ROLES.length*10);
+			$("#players").attr("max", POSSIBLE_ROLES.length * 10);
 
 			/*
 			 * Make sure the value entered was valid
 			 */
 			function validateForm() {
 				if (numPlayers < POSSIBLE_ROLES.length) {
-					message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " + POSSIBLE_ROLES + ". 😊");
+					message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
+						POSSIBLE_ROLES + ". 😊");
 					return false;
 				} else if (numPlayers < POSSIBLE_ROLES.length * 10) {
-					message("Danger", "Oops!", "Please enter a # of players less than" + (POSSIBLE_ROLES*10) + ". 😊");
+					message("Danger", "Oops!", "Please enter a # of players less than" + (POSSIBLE_ROLES * 10) +
+						". 😊");
 					return false;
 				} else if (!numPlayers || !POSSIBLE_ROLES) {
 					message("Warning", "Woah!", "Something went badly wrong! 🐷");
@@ -93,17 +125,18 @@
 
 			/*
 			 * Takes the input (amount of players) and randomly inserts the amount of roles in the roles arr
+			 * @param {function} callback - Callback function
 			 */
-			function processData() {
+			function processData(_callback) {
 				// Calculate amount of players for each role
 				for (const role in roles) {
 					if (roles.hasOwnProperty(role)) {
 						roles[role] = mode == 'oneSpec' ? 1 : Math.floor(numPlayers / POSSIBLE_ROLES.length);
 						// Make sure that innocent has the oveflow
 						if (role == 'Innocent') {
-							roles[role] = mode == 'oneSpec' 
-								? numPlayers - (POSSIBLE_ROLES.length - 1)
-								: roles[role] + (numPlayers % POSSIBLE_ROLES.length);
+							roles[role] = mode == 'oneSpec' ?
+								numPlayers - (POSSIBLE_ROLES.length - 1) :
+								roles[role] + (numPlayers % POSSIBLE_ROLES.length);
 						}
 					}
 				}
@@ -118,7 +151,12 @@
 						}
 					}
 				}
-				shuffle(rolesArr)
+				shuffle(rolesArr);
+				_callback();
+			}
+
+			function revealRoles() {
+				$(".reveal").attr('hidden', false);
 			}
 
 			// "Process" form data
@@ -127,12 +165,45 @@
 				validateForm(); // Check input
 				numPlayers = $("#players").val(); // Update numPlayers
 				$(".enter-num-players").hide(); // Hide form
-				processData(); // Update roles and rolesArr
+				processData(revealRoles); // Update roles and rolesArr
 			});
 
 			$(".mode a").on('click', function (e) {
 				e.preventDefault(); // Just in case
 				mode = $(this).attr("name"); // Get mode
+			});
+
+			$("#reveal-btn").on('click', function () {
+				if (currentRole < numPlayers) {
+					if (!revealed) {
+						$(".reveal-msg").remove();
+						$(".reveal").prepend("<p class='reveal-msg'>Your role is <span id='role' class='" +
+							rolesArr[currentRole].toLowerCase() +"'>" + rolesArr[currentRole] +"</span>!</p>");
+						$("#reveal-lbl").html("☝<br>click this once you've read it. (Then, let the next person get their role!)");
+						$(this).text("next");
+						revealed = true;
+						currentRole++;
+					} else {
+						$(this).text("reveal");
+						revealed = false;
+						$(".reveal-msg").html("<br>");
+						$("#reveal-lbl").html("☝<br>click this to reveal your role!");
+					}
+				} else {
+					$(".reveal").remove();
+					$("#finish").removeClass("hidden")
+						.attr("hidden", false);
+				}
+			});
+
+			$("#finish-btn").on('click', function() {
+				$('#finish').remove();
+				$("#new-game").removeClass("hidden")
+					.attr("hidden", false);
+			});
+
+			$("#new-game-btn").on('click', function() {
+				location.reload();
 			});
 
 			/**
