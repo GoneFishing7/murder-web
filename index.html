@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="css/bootstrap.css">
+
+	<!-- Custom CSS -->
+	<link rel="stylesheet" href="css/styles.css">
+
+	<title>Murder Mystery Roles Generator</title>
+</head>
+
+<body>
+	<h1>The Murder Mystery Roles Generator</h1>
+	<main>
+		<noscript>
+			<p>Yeah, you're gonna want JavaScript enabled... 😁</p>
+		</noscript>
+		<form class="enter-num-players">
+			<br><br>
+			<div class='form-attribute'>
+				<input type="number" id="players" min="1" max="99" placeholder="3-30" value="5">
+				<label for="players"># of players</label>
+			</div>
+			<div class="dropdown">
+				<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Select Mode!
+				</button>
+				<div class="dropdown-menu mode" aria-labelledby="dropdownMenuButton">
+					<a class="dropdown-item" href="#" name="default">Default</a>
+					<a class="dropdown-item" href="#" name="oneSpec">One Special</a>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary submit">Show Roles!</button>
+		</form>
+	</main>
+
+	<!-- jQuery-->
+	<script src="js/jquery-3.4.1.min.js"></script>
+
+	<!-- Popper.js -->
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.js"></script>
+
+	<!-- Message JS -->
+	<script src="js/message.js"></script>
+
+	<!-- Custom JS -->
+	<script type="text/javascript">
+		$(document).ready(function () {
+			// The amount of players entered (int/long)
+			var numPlayers;
+			// The roles: it will contain the amount there is of each role. (JSON)
+			var roles = {};
+			var rolesArr = [];
+			var mode = 'default'; // Can be default or oneSpec
+			const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer'];
+
+			// Initialize roles
+			for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
+				const role = POSSIBLE_ROLES[i];
+				roles[role] = 0;
+			}
+
+			// Set min and max of form
+			$("#players").attr("min", POSSIBLE_ROLES.length);
+			$("#players").attr("max", POSSIBLE_ROLES.length*10);
+
+			/*
+			 * Make sure the value entered was valid
+			 */
+			function validateForm() {
+				if (numPlayers < POSSIBLE_ROLES.length) {
+					message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " + POSSIBLE_ROLES + ". 😊");
+					return false;
+				} else if (numPlayers < POSSIBLE_ROLES.length * 10) {
+					message("Danger", "Oops!", "Please enter a # of players less than" + (POSSIBLE_ROLES*10) + ". 😊");
+					return false;
+				} else if (!numPlayers || !POSSIBLE_ROLES) {
+					message("Warning", "Woah!", "Something went badly wrong! 🐷");
+					return false;
+				} else {
+					return true;
+				}
+			}
+
+			/*
+			 * Takes the input (amount of players) and randomly inserts the amount of roles in the roles arr
+			 */
+			function processData() {
+				// Calculate amount of players for each role
+				for (const role in roles) {
+					if (roles.hasOwnProperty(role)) {
+						roles[role] = mode == 'oneSpec' ? 1 : Math.floor(numPlayers / POSSIBLE_ROLES.length);
+						// Make sure that innocent has the oveflow
+						if (role == 'Innocent') {
+							roles[role] = mode == 'oneSpec' 
+								? numPlayers - (POSSIBLE_ROLES.length - 1)
+								: roles[role] + (numPlayers % POSSIBLE_ROLES.length);
+						}
+					}
+				}
+
+				// Populate rolesArr[]
+				for (const role in roles) {
+					if (roles.hasOwnProperty(role)) {
+						// Example: {role: 'Innocent', amount: '2'}
+						const amount = roles[role];
+						for (let i = 0; i < amount; i++) {
+							rolesArr.push(role);
+						}
+					}
+				}
+				shuffle(rolesArr)
+			}
+
+			// "Process" form data
+			$('.enter-num-players').on('submit', function (e) {
+				e.preventDefault(); // Just in case
+				validateForm(); // Check input
+				numPlayers = $("#players").val(); // Update numPlayers
+				$(".enter-num-players").hide(); // Hide form
+				processData(); // Update roles and rolesArr
+			});
+
+			$(".mode a").on('click', function (e) {
+				e.preventDefault(); // Just in case
+				mode = $(this).attr("name"); // Get mode
+			});
+
+			/**
+			 * Shuffles array in place.
+			 * @param {Array} a items An array containing the items.
+			 */
+			function shuffle(a) {
+				var j, x, i;
+				for (i = a.length - 1; i > 0; i--) {
+					j = Math.floor(Math.random() * (i + 1));
+					x = a[i];
+					a[i] = a[j];
+					a[j] = x;
+				}
+				return a;
+			}
+		});
+	</script>
+</body>
+
+</html>
