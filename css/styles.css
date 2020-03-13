@@ -29,6 +29,10 @@ label {
     color: blue;
 }
 
+#players {
+    font-family: 'Indie Flower', cursive;
+}
+
 #role {
     font-weight: 900;
 }

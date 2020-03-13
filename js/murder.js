@@ -18,17 +18,19 @@ $(document).ready(function () {
     // Set min and max of form
     $("#players").attr("min", POSSIBLE_ROLES.length);
     $("#players").attr("max", POSSIBLE_ROLES.length * 10);
+    $("#players").attr("placeholder", (POSSIBLE_ROLES.length) + "-" + (POSSIBLE_ROLES.length*10));
 
     /*
      * Make sure the value entered was valid
      */
     function validateForm() {
+        console.log(numPlayers);
         if (numPlayers < POSSIBLE_ROLES.length) {
             message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
-                POSSIBLE_ROLES + ". 😊");
+                POSSIBLE_ROLES.length + ". 🤓");
             return false;
-        } else if (numPlayers < POSSIBLE_ROLES.length * 10) {
-            message("Danger", "Oops!", "Please enter a # of players less than" + (POSSIBLE_ROLES * 10) +
+        } else if (numPlayers > POSSIBLE_ROLES.length * 10) {
+            message("Danger", "Oops!", "Please enter a # of players less than " + (POSSIBLE_ROLES.length * 10) +
                 ". 😊");
             return false;
         } else if (!numPlayers || !POSSIBLE_ROLES) {
@@ -77,9 +79,11 @@ $(document).ready(function () {
 
     // "Process" form data
     $('.enter-num-players').on('submit', function (e) {
-        e.preventDefault(); // Just in case
-        validateForm(); // Check input
-        numPlayers = $("#players").val(); // Update numPlayers
+        e.preventDefault();
+        numPlayers = Number($("#players").val()); // Update numPlayers
+        if (!validateForm()) { // Check input
+            return false;
+        }
         $(".enter-num-players").hide(); // Hide form
         processData(revealRoles); // Update roles and rolesArr
     });

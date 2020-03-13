@@ -5,7 +5,7 @@
  * @param {string} body - The body of the alert, like  **oh no** LOREM IPSUM...
  */
 function message(theme, bold, body) {
-    $(".main")
+    $("main")
         .prepend("<div class='alert alert-" + theme.toLowerCase() +
             "' id='alert' role='alert' style='display: none;'><strong>" + bold + "</strong> " + body +
             "</div>");
