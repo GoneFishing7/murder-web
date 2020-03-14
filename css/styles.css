@@ -1,38 +1,39 @@
 * {
-    font-family: 'Fira Code', monospace;
+	font-family: 'Fira Code', monospace;
 }
 
 body {
-    padding: 5%;
-    align-content: center;
-    text-align: center;
+	padding: 5%;
+	align-content: center;
+	text-align: center;
 }
 
 label {
-    font-family: 'Indie Flower', cursive;
-    font-size: 20px;
+	font-family: 'Indie Flower', cursive;
+	font-size: 20px;
 }
 
-.reveal-msg, .finish-msg {
-    font-size: 24px;
+.reveal-msg,
+.finish-msg {
+	font-size: 24px;
 }
 
-.innocent {
-    color: green;
+.role {
+	font-weight: 900;
 }
 
-.murderer {
-    color: red;
+#innocent {
+	color: green;
 }
 
-.detective {
-    color: blue;
+#murderer {
+	color: red;
+}
+
+#detective {
+	color: blue;
 }
 
 #players {
-    font-family: 'Indie Flower', cursive;
-}
-
-#role {
-    font-weight: 900;
+	font-family: 'Indie Flower', cursive;
 }
