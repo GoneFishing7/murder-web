@@ -4,5 +4,5 @@ Same as https://github.com/Gonefishing7/murder, except implemented as a static w
 ### TODO
 - [x] Add actual output
 - [x] In default mode, tell which others have the same role, except for innocent.
-- [ ] Add rules for everybody's it tag style murder mystery.
 - [x] Change mode selector
+- [x] Add dark mode
