@@ -37,14 +37,14 @@ $(document).ready(function () {
 		} else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
 			message("Warning", "Woah!", "Something went badly wrong! 🐷 ^\_(ツ)_/^");
 			return false;
-		} else {
+		} else { // Great!
 			return true;
 		}
 	}
 
 	/**
 	 * Takes the input (amount of players) and randomly inserts the amount of roles in the roles arr
-	 * @param {object} _callback - Callback function
+	 * @param {Function} _callback - Callback function
 	 */
 	function processData(_callback) {
 		// Calculate amount of players for each role
@@ -53,9 +53,9 @@ $(document).ready(function () {
 				roles[role] = mode == 'oneSpec' ? 1 : Math.floor(numPlayers / POSSIBLE_ROLES.length);
 				// Make sure that innocent has the oveflow
 				if (role == 'Innocent') {
-					roles[role] = mode == 'oneSpec' ?
-						numPlayers - (POSSIBLE_ROLES.length - 1) :
-						roles[role] + (numPlayers % POSSIBLE_ROLES.length);
+					roles[role] = mode == 'oneSpec' ? // If the mode is one special:
+						numPlayers - (POSSIBLE_ROLES.length - 1) : // Then the the amount of this role will be the amount of players minus itself
+						roles[role] + (numPlayers % POSSIBLE_ROLES.length); // Else, this is the default mode
 				}
 			}
 		}
@@ -97,11 +97,13 @@ $(document).ready(function () {
 	});
 
 	$("#reveal-btn").on('click', function () {
-		if (currentRole < numPlayers) {
-			if (!revealed) {
-				$(".reveal-msg").remove();
+		if (currentRole < numPlayers) { // If we aren't done yet
+			if (!revealed) { // If we haven't revealed it yet
+				$(".reveal-msg").remove(); // Get rid of the old reveal message
+				// Add a reveal message
 				$(".reveal").prepend("<p class='reveal-msg'>Your role is <span class='role' id='" +
 					rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
+				// Create others message
 				let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
 				let othersMessage = "";
 
@@ -115,32 +117,42 @@ $(document).ready(function () {
 				}
 				if (others.length >= 1) {
 					othersMessage = (rolesArr[currentRole] == 'Innocent' ? "" :
-										others.length < 1 ? "" 
-										: others.length == 1 ? "The other " + rolesArr[currentRole] + " is " 
-										: "The other " + rolesArr[currentRole] + "s are ")
-									+ "<span class='role' id='" + rolesArr[currentRole].toLowerCase() + "'>" + othersMessage;
+							others.length < 1 ? "" :
+							others.length == 1 ? "The other " + rolesArr[currentRole] + " is " :
+							"The other " + rolesArr[currentRole] + "s are ") +
+						"<span class='role' id='" + rolesArr[currentRole].toLowerCase() + "'>" + othersMessage;
 					othersMessage += "Person #" + (others[others.length - 1] + 1) + "</span>.";
 				}
 
+				// Show the others message along with the 'click this' message, unless they're innocent
 				$("#reveal-lbl").html("☝<br>click this once you've read and memorized it. (Then, let the next person get their role!)" +
 					"<br>" + (rolesArr[currentRole] == 'Innocent' ? "" : othersMessage));
 
+				// Update button text
 				$(this).text("next");
+				// Update revealed
 				revealed = true;
+				// Make sure we move on to the next person
 				currentRole++;
-			} else {
+			} else { // We've already revealed
+				// Update text
 				$(this).text("reveal");
+				// Update revealed
 				revealed = false;
+				// Add a placeholder to the blank reveal message
 				$(".reveal-msg").html("<br>");
+				// Update the reveal label
 				$("#reveal-lbl").html("☝<br>click this to reveal your role!");
 			}
 		} else {
+			// We're done
 			$(".reveal").remove();
 			$("#finish").show();
 		}
 	});
 
 	$("#finish-btn").on('click', function () {
+		// Move on to the new-game scene
 		$('#finish').remove();
 		$("#new-game").show();
 	});
@@ -151,7 +163,7 @@ $(document).ready(function () {
 
 	/**
 	 * Shuffles array in place.
-	 * @param {Array} a items An array containing the items.
+	 * @param {Array} a - An array containing the items.
 	 */
 	function shuffle(a) {
 		var j, x, i;
