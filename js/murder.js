@@ -75,7 +75,7 @@ $(document).ready(function () {
 	}
 
 	function revealRoles() {
-		$(".reveal").attr('hidden', false);
+		$(".reveal").show();
 	}
 
 	// "Process" form data
@@ -136,15 +136,13 @@ $(document).ready(function () {
 			}
 		} else {
 			$(".reveal").remove();
-			$("#finish").removeClass("hidden")
-				.attr("hidden", false);
+			$("#finish").show();
 		}
 	});
 
 	$("#finish-btn").on('click', function () {
 		$('#finish').remove();
-		$("#new-game").removeClass("hidden")
-			.attr("hidden", false);
+		$("#new-game").show();
 	});
 
 	$("#new-game-btn").on('click', function () {

@@ -53,14 +53,14 @@
 					<a class="dropdown-item" href="#" id="mode-oneSpec">One Special</a>
 				</div>
 			</div>
-			<br>	
+			<br>
 			<div class='form-group'>
 				<button type="submit" class="btn btn-primary submit">show roles</button>
 			</div>
 		</form>
 
 		<!-- Reveal button -->
-		<div class='reveal' hidden>
+		<div class='reveal' style="display: none">
 			<p class='reveal-msg'><br></p>
 			<button class='btn btn-success' id='reveal-btn'>reveal</button>
 			<br>
@@ -68,7 +68,7 @@
 		</div>
 
 		<!-- Finished message -->
-		<div id='finish' hidden>
+		<div id='finish' style="display: none;">
 			<p class='finish-msg'>all players have roles. prepare to start round.</p>
 			<button class='btn btn-success' id='finish-btn'>done</button>
 			<br>
@@ -76,9 +76,10 @@
 		</div>
 
 		<!-- Play again button (hidden until #finish-btn has been presssed)-->
-		<div id='new-game' hidden>
+		<div id='new-game' style="display: none;">
 			<button class='btn btn-success' id='new-game-btn'>new game</button><br>
-			<label id='new-game-lbl' for='new-game-btn'>☝<br>click this to reload assignments and start a new game.</label>
+			<label id='new-game-lbl' for='new-game-btn'>☝<br>click this to reload assignments and start a new
+				game.</label>
 		</div>
 	</main>
 
