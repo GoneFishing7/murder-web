@@ -13,17 +13,10 @@ label {
 	font-size: 20px;
 }
 
-h1.dark-mode {
-	color: rgb(226, 226, 226);
-}
-
-hr.dark-mode {
-	border-top: 1px solid rgb(226, 226, 226);
-}
-
 .dark-mode {
-	background-color: black;
-	color: rgb(226, 226, 226);
+    background-color: #222;
+    color: #e6e6e6;
+    border-color: #e6e6e6;
 }
 
 .reveal-msg,
