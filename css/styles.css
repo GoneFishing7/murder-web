@@ -8,14 +8,22 @@ body {
 	text-align: center;
 }
 
-dark-mode {
-	background-color: black;
-	color: whitesmoke;
-}
-
 label {
 	font-family: 'Indie Flower', cursive;
 	font-size: 20px;
+}
+
+h1.dark-mode {
+	color: rgb(226, 226, 226);
+}
+
+hr.dark-mode {
+	border-top: 1px solid rgb(226, 226, 226);
+}
+
+.dark-mode {
+	background-color: black;
+	color: rgb(226, 226, 226);
 }
 
 .reveal-msg,
