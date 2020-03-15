@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
 	// The amount of players entered (int/long)
 	var numPlayers;
 	// The roles: it will contain the amount there is of each role. (JSON)
@@ -30,14 +30,17 @@ $(document).ready(function () {
 			message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
 				MIN + ". 🤓");
 			return false;
-		} else if (numPlayers > MAX) { // Make sure it isn't too big
+		}
+		else if (numPlayers > MAX) { // Make sure it isn't too big
 			message("Danger", "Oops!", "Please enter a # of players less than " + MAX +
 				". 😊");
 			return false;
-		} else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
+		}
+		else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
 			message("Warning", "Woah!", "Something went badly wrong! 🐷 ^\_(ツ)_/^");
 			return false;
-		} else { // Great!
+		}
+		else { // Great!
 			return true;
 		}
 	}
@@ -79,7 +82,7 @@ $(document).ready(function () {
 	}
 
 	// "Process" form data
-	$('.enter-num-players').on('submit', function (e) {
+	$('.enter-num-players').on('submit', function(e) {
 		e.preventDefault();
 		numPlayers = Number($("#players").val()); // Update numPlayers
 		if (!validateForm()) { // Check input
@@ -89,14 +92,14 @@ $(document).ready(function () {
 		processData(revealRoles); // Update roles and rolesArr
 	});
 
-	$(".mode a").on('click', function (e) {
+	$(".mode a").on('click', function(e) {
 		e.preventDefault(); // Just in case
 		mode = $(this).attr("id").replace("mode-", ''); // Get mode
 		$(".mode a").removeClass("active");
 		$(this).addClass("active");
 	});
 
-	$("#reveal-btn").on('click', function () {
+	$("#reveal-btn").on('click', function() {
 		if (currentRole < numPlayers) { // If we aren't done yet
 			if (!revealed) { // If we haven't revealed it yet
 				$(".reveal-msg").remove(); // Get rid of the old reveal message
@@ -105,24 +108,8 @@ $(document).ready(function () {
 					rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
 				// Create others message
 				let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
-				let othersMessage = "";
 
-				if (others.length > 2) {
-					for (let index = 0; index < others.length - 1; index++) {
-						othersMessage += "Person #" + (others[index] + 1) + ", "
-					}
-					othersMessage += "and ";
-				} else if (others.length == 2) {
-					othersMessage += "Person #" + (others[0] + 1) + " and ";
-				}
-				if (others.length >= 1) {
-					othersMessage = (rolesArr[currentRole] == 'Innocent' ? "" :
-							others.length < 1 ? "" :
-							others.length == 1 ? "The other " + rolesArr[currentRole] + " is " :
-							"The other " + rolesArr[currentRole] + "s are ") +
-						"<span class='role' id='" + rolesArr[currentRole].toLowerCase() + "'>" + othersMessage;
-					othersMessage += "Person #" + (others[others.length - 1] + 1) + "</span>.";
-				}
+				let othersMessage = genOthersMessage(rolesArr[currentRole], others)
 
 				// Show the others message along with the 'click this' message, unless they're innocent
 				$("#reveal-lbl").html("☝<br>click this once you've read and memorized it. (Then, let the next person get their role!)" +
@@ -134,7 +121,8 @@ $(document).ready(function () {
 				revealed = true;
 				// Make sure we move on to the next person
 				currentRole++;
-			} else { // We've already revealed
+			}
+			else { // We've already revealed
 				// Update text
 				$(this).text("reveal");
 				// Update revealed
@@ -144,20 +132,21 @@ $(document).ready(function () {
 				// Update the reveal label
 				$("#reveal-lbl").html("☝<br>click this to reveal your role!");
 			}
-		} else {
+		}
+		else {
 			// We're done
 			$(".reveal").remove();
 			$("#finish").show();
 		}
 	});
 
-	$("#finish-btn").on('click', function () {
+	$("#finish-btn").on('click', function() {
 		// Move on to the new-game scene
 		$('#finish').remove();
 		$("#new-game").show();
 	});
 
-	$("#new-game-btn").on('click', function () {
+	$("#new-game-btn").on('click', function() {
 		location.reload();
 	});
 
@@ -191,5 +180,31 @@ $(document).ready(function () {
 			}
 		}
 		return found;
+	}
+
+	/**
+	 * Generates an 'others' message. eg - "Person #2, Person #5, and Person %9"
+	 */
+	function genOthersMessage(role, others) {
+		let othersMessage = "";
+
+		if (others.length > 2) {
+			for (let index = 0; index < others.length - 1; index++) {
+				othersMessage += "Person #" + (others[index] + 1) + ", ";
+			}
+			othersMessage += "and ";
+		}
+		else if (others.length == 2) {
+			othersMessage += "Person #" + (others[0] + 1) + " and ";
+		}
+		if (others.length >= 1) {
+			othersMessage = (role == 'Innocent' ? "" :
+					others.length < 1 ? "" :
+					others.length == 1 ? "The other " + role + " is " :
+					"The other " + role + "s are ") +
+				"<span class='role' id='" + role.toLowerCase() + "'>" + othersMessage;
+			othersMessage += "Person #" + (others[others.length - 1] + 1) + "</span>.";
+		}
+		return othersMessage;
 	}
 });
