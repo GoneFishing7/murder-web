@@ -8,8 +8,8 @@ $(document).ready(function() {
 	var currentRole = 0; // Only for revealing
 	var revealed = false; // Check if current role has been revealed
 	const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer'];
-	var MIN = POSSIBLE_ROLES.length;
-	var MAX = POSSIBLE_ROLES.length * 5;
+	const MIN = POSSIBLE_ROLES.length;
+	const MAX = POSSIBLE_ROLES.length * 5;
 
 	// Initialize roles
 	for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
@@ -103,12 +103,15 @@ $(document).ready(function() {
 		if (currentRole < numPlayers) { // If we aren't done yet
 			if (!revealed) { // If we haven't revealed it yet
 				$(".reveal-msg").remove(); // Get rid of the old reveal message
+
 				// Add a reveal message
 				$(".reveal").prepend("<p class='reveal-msg'>Your role is <span class='role' id='" +
 					rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
-				// Create others message
+				
+				// Get others that have the same role
 				let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
 
+				// Generate the others message
 				let othersMessage = genOthersMessage(rolesArr[currentRole], others)
 
 				// Show the others message along with the 'click this' message, unless they're innocent
@@ -135,19 +138,19 @@ $(document).ready(function() {
 		}
 		else {
 			// We're done
-			$(".reveal").remove();
+			$(".reveal").hide();
 			$("#finish").show();
 		}
 	});
 
 	$("#finish-btn").on('click', function() {
 		// Move on to the new-game scene
-		$('#finish').remove();
+		$('#finish').hide();
 		$("#new-game").show();
 	});
 
 	$("#new-game-btn").on('click', function() {
-		location.reload();
+		reset();
 	});
 
 	/**
@@ -206,5 +209,31 @@ $(document).ready(function() {
 			othersMessage += "Person #" + (others[others.length - 1] + 1) + "</span>.";
 		}
 		return othersMessage;
+	}
+	/**
+	 * Reset the page to the original view
+	 */
+	function reset() {
+		// Reset all the variables
+		numPlayers = null;
+		roles = {};
+		rolesArr = [];
+		mode = 'default'; 
+		currentRole = 0;
+		revealed = true;
+
+		for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
+			const role = POSSIBLE_ROLES[i];
+			roles[role] = 0;
+		}
+	
+		// Set min and max of form
+		$("#players").attr("min", MIN);
+		$("#players").attr("max", MAX);
+		$("#players").attr("placeholder", MIN + "-" + MAX);
+
+		// Reset the page view
+		$("#new-game").hide();
+		$(".enter-num-players").show();
 	}
 });
