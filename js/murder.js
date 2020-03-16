@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	// The amount of players entered (int/long)
+	// NOTE: MOST VARIABLES COPIED HERE WILL NEED TO BE RESET IN THE RESET FUNCTION
 	var numPlayers;
 	// The roles: it will contain the amount there is of each role. (JSON)
 	var roles = {};
@@ -62,6 +63,8 @@ $(document).ready(function() {
 				}
 			}
 		}
+
+		console.log(roles)
 
 		// Populate rolesArr[]
 		for (const role in roles) {
@@ -220,7 +223,6 @@ $(document).ready(function() {
 		rolesArr = [];
 		mode = 'default'; 
 		currentRole = 0;
-		revealed = true;
 
 		for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
 			const role = POSSIBLE_ROLES[i];
@@ -235,5 +237,14 @@ $(document).ready(function() {
 		// Reset the page view
 		$("#new-game").hide();
 		$(".enter-num-players").show();
+
+		// Reset the reveal div 
+		$("#reveal").text("reveal");
+		// Update revealed
+		revealed = false;
+		// Add a placeholder to the blank reveal message
+		$(".reveal-msg").html("<br>");
+		// Update the reveal label
+		$("#reveal-lbl").html("☝<br>click this to reveal your role!");
 	}
 });
