@@ -12,5 +12,6 @@ $(document).ready(function () {
             .toggleClass("btn-light");
         $("body").toggleClass("dark-mode");
         $("hr").toggleClass("dark-mode");
+        $("input").toggleClass("dark-mode");
     });
 });

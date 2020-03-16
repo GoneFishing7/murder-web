@@ -13,10 +13,21 @@ label {
 	font-size: 20px;
 }
 
+input {
+	text-align: center;
+}
+
 .dark-mode {
-    background-color: #222;
-    color: #e6e6e6;
-    border-color: #e6e6e6;
+	background-color: #222;
+	color: #e6e6e6;
+	border-color: #e6e6e6;
+}
+
+input.dark-mode {
+	background-color: #222;
+	border-color: white;
+	color: #e6e6e6;
+	font-weight: bold;
 }
 
 .reveal-msg,
@@ -28,6 +39,14 @@ label {
 	font-weight: 900;
 }
 
+.dark-mode-btn {
+	width: auto;
+	height: auto;
+	position: fixed;
+	right: 10px;
+	bottom: 10px;
+}
+
 #innocent {
 	color: green;
 }
@@ -37,7 +56,7 @@ label {
 }
 
 #detective {
-	color: blue;
+	color: skyblue;
 }
 
 #players {

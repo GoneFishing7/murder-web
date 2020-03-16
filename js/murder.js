@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
 	// The amount of players entered (int/long)
 	// NOTE: MOST VARIABLES COPIED HERE WILL NEED TO BE RESET IN THE RESET FUNCTION
 	var numPlayers;
@@ -8,9 +8,10 @@ $(document).ready(function() {
 	var mode = 'default'; // Can be default or oneSpec
 	var currentRole = 0; // Only for revealing
 	var revealed = false; // Check if current role has been revealed
-	const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer'];
-	const MIN = POSSIBLE_ROLES.length;
-	const MAX = POSSIBLE_ROLES.length * 5;
+	const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer']; // Persistent after reset
+	const MIN = POSSIBLE_ROLES.length; // Persistent after reset
+	const MAX = POSSIBLE_ROLES.length * 5; // Persistent after reset
+	var names = {} // Persistent after reset
 
 	// Initialize roles
 	for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
@@ -31,17 +32,14 @@ $(document).ready(function() {
 			message("Danger", "Oops!", "Please enter a # of players bigger than (or equal to) " +
 				MIN + ". 🤓");
 			return false;
-		}
-		else if (numPlayers > MAX) { // Make sure it isn't too big
+		} else if (numPlayers > MAX) { // Make sure it isn't too big
 			message("Danger", "Oops!", "Please enter a # of players less than " + MAX +
 				". 😊");
 			return false;
-		}
-		else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
+		} else if (!numPlayers || !POSSIBLE_ROLES) { // Make sure nothing went crazy
 			message("Warning", "Woah!", "Something went badly wrong! 🐷 ^\_(ツ)_/^");
 			return false;
-		}
-		else { // Great!
+		} else { // Great!
 			return true;
 		}
 	}
@@ -64,8 +62,6 @@ $(document).ready(function() {
 			}
 		}
 
-		console.log(roles)
-
 		// Populate rolesArr[]
 		for (const role in roles) {
 			if (roles.hasOwnProperty(role)) {
@@ -85,7 +81,7 @@ $(document).ready(function() {
 	}
 
 	// "Process" form data
-	$('.enter-num-players').on('submit', function(e) {
+	$('.enter-num-players').on('submit', function (e) {
 		e.preventDefault();
 		numPlayers = Number($("#players").val()); // Update numPlayers
 		if (!validateForm()) { // Check input
@@ -95,14 +91,14 @@ $(document).ready(function() {
 		processData(revealRoles); // Update roles and rolesArr
 	});
 
-	$(".mode a").on('click', function(e) {
+	$(".mode a").on('click', function (e) {
 		e.preventDefault(); // Just in case
 		mode = $(this).attr("id").replace("mode-", ''); // Get mode
 		$(".mode a").removeClass("active");
 		$(this).addClass("active");
 	});
 
-	$("#reveal-btn").on('click', function() {
+	$("#reveal-btn").on('click', function () {
 		if (currentRole < numPlayers) { // If we aren't done yet
 			if (!revealed) { // If we haven't revealed it yet
 				$(".reveal-msg").remove(); // Get rid of the old reveal message
@@ -110,7 +106,7 @@ $(document).ready(function() {
 				// Add a reveal message
 				$(".reveal").prepend("<p class='reveal-msg'>Your role is <span class='role' id='" +
 					rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
-				
+
 				// Get others that have the same role
 				let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
 
@@ -127,8 +123,7 @@ $(document).ready(function() {
 				revealed = true;
 				// Make sure we move on to the next person
 				currentRole++;
-			}
-			else { // We've already revealed
+			} else { // We've already revealed
 				// Update text
 				$(this).text("reveal");
 				// Update revealed
@@ -138,21 +133,20 @@ $(document).ready(function() {
 				// Update the reveal label
 				$("#reveal-lbl").html("☝<br>click this to reveal your role!");
 			}
-		}
-		else {
+		} else {
 			// We're done
 			$(".reveal").hide();
 			$("#finish").show();
 		}
 	});
 
-	$("#finish-btn").on('click', function() {
+	$("#finish-btn").on('click', function () {
 		// Move on to the new-game scene
 		$('#finish').hide();
 		$("#new-game").show();
 	});
 
-	$("#new-game-btn").on('click', function() {
+	$("#new-game-btn").on('click', function () {
 		reset();
 	});
 
@@ -185,23 +179,35 @@ $(document).ready(function() {
 				found.push(i);
 			}
 		}
+		for (const index in names) {
+			if (names.hasOwnProperty(index)) {
+				const name = names[index];
+				
+			}
+		}
 		return found;
 	}
 
 	/**
-	 * Generates an 'others' message. eg - "Person #2, Person #5, and Person %9"
+	 * Generates an 'others' message. eg - "Person #2, Person #5, and Person #9"
 	 */
 	function genOthersMessage(role, others) {
 		let othersMessage = "";
-
 		if (others.length > 2) {
 			for (let index = 0; index < others.length - 1; index++) {
-				othersMessage += "Person #" + (others[index] + 1) + ", ";
+				const currentPerson = others[index]
+				// if there is a name for the current person
+				othersMessage += 
+					(!names[currentPerson] ? "Person #" + (currentPerson + 1) 
+						: names[currentPerson])
+					+ ", ";
 			}
 			othersMessage += "and ";
-		}
-		else if (others.length == 2) {
-			othersMessage += "Person #" + (others[0] + 1) + " and ";
+		} else if (others.length == 2) {
+			othersMessage += 
+				(!names[others[0]] ? "Person #" + (others[0] + 1)
+					: names[others[0]]) 
+				+ " and ";
 		}
 		if (others.length >= 1) {
 			othersMessage = (role == 'Innocent' ? "" :
@@ -209,7 +215,10 @@ $(document).ready(function() {
 					others.length == 1 ? "The other " + role + " is " :
 					"The other " + role + "s are ") +
 				"<span class='role' id='" + role.toLowerCase() + "'>" + othersMessage;
-			othersMessage += "Person #" + (others[others.length - 1] + 1) + "</span>.";
+			othersMessage += 
+				(!names[others[others.length - 1]] ? "Person #" +  (others[others.length - 1] + 1)
+					: names[others[others.length - 1]]) 
+				+ "</span>.";
 		}
 		return othersMessage;
 	}
@@ -221,14 +230,14 @@ $(document).ready(function() {
 		numPlayers = null;
 		roles = {};
 		rolesArr = [];
-		mode = 'default'; 
+		mode = 'default';
 		currentRole = 0;
 
 		for (let i = 0; i < POSSIBLE_ROLES.length; i++) {
 			const role = POSSIBLE_ROLES[i];
 			roles[role] = 0;
 		}
-	
+
 		// Set min and max of form
 		$("#players").attr("min", MIN);
 		$("#players").attr("max", MAX);
