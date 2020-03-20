@@ -80,6 +80,29 @@ $(document).ready(function () {
 		$(".reveal").show();
 	}
 
+	// Enter player names dropdown (make sure that the length of array is right)
+	$(".enter-player-names").on('show.bs.dropdown', function () {
+		// NOTE: $names is the div holding the names inputs. 
+		// 		 Use $names.children() to access the children
+		console.log("adding names")
+		let $names = $("#names");
+		let $players = $("#players");
+		if ($names.children().length < $players.val()) {
+			while ($names.children().length < $players.val()) {
+				$names.append(`<input type='text' class='dropdown-item border name' ` + 
+					`placeholder='Player #${$names.children().length+1}'>`);
+			}
+		} else if ($names.children().length > $players.val()) {
+			console.log("removing names");
+			while ($names.children().length > $players.val()) {
+				$names.children().last().remove();
+				console.log("removing name")
+			}
+		} else {
+			console.log("we good");
+		}
+	});
+
 	// "Process" form data
 	$('.enter-num-players').on('submit', function (e) {
 		e.preventDefault();
@@ -88,6 +111,7 @@ $(document).ready(function () {
 			return false;
 		}
 		$(".enter-num-players").hide(); // Hide form
+		updateNames(); // Update the names Map with the values entered
 		processData(revealRoles); // Update roles and rolesArr
 	});
 
@@ -179,12 +203,6 @@ $(document).ready(function () {
 				found.push(i);
 			}
 		}
-		for (const index in names) {
-			if (names.hasOwnProperty(index)) {
-				const name = names[index];
-				
-			}
-		}
 		return found;
 	}
 
@@ -197,17 +215,17 @@ $(document).ready(function () {
 			for (let index = 0; index < others.length - 1; index++) {
 				const currentPerson = others[index]
 				// if there is a name for the current person
-				othersMessage += 
-					(!names[currentPerson] ? "Person #" + (currentPerson + 1) 
-						: names[currentPerson])
-					+ ", ";
+				othersMessage +=
+					(!names[currentPerson] ? `Person #${currentPerson + 1}` :
+						names[currentPerson]) +
+					", ";
 			}
 			othersMessage += "and ";
 		} else if (others.length == 2) {
-			othersMessage += 
-				(!names[others[0]] ? "Person #" + (others[0] + 1)
-					: names[others[0]]) 
-				+ " and ";
+			othersMessage +=
+				(!names[others[0]] ? "Person #" + (others[0] + 1) :
+					names[others[0]]) +
+				" and ";
 		}
 		if (others.length >= 1) {
 			othersMessage = (role == 'Innocent' ? "" :
@@ -215,13 +233,26 @@ $(document).ready(function () {
 					others.length == 1 ? "The other " + role + " is " :
 					"The other " + role + "s are ") +
 				"<span class='role' id='" + role.toLowerCase() + "'>" + othersMessage;
-			othersMessage += 
-				(!names[others[others.length - 1]] ? "Person #" +  (others[others.length - 1] + 1)
-					: names[others[others.length - 1]]) 
-				+ "</span>.";
+			othersMessage +=
+				(!names[others[others.length - 1]] ? "Person #" + (others[others.length - 1] + 1) :
+					names[others[others.length - 1]]) +
+				"</span>.";
 		}
 		return othersMessage;
 	}
+
+	/**
+	 * Update the names map with values entered
+	 */
+	function updateNames() {
+		$(".name").each(function (index) {
+			if ($(this).val().trim()) {
+				names[index] = $(this).val();
+			}
+		});
+		console.log(names);
+	}
+
 	/**
 	 * Reset the page to the original view
 	 */

@@ -44,7 +44,7 @@
 				<div class="dropdown from-group">
 					<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					select mode
-				</button>
+					</button>
 					<div class="dropdown-menu mode" aria-labelledby="dropdownMenuButton">
 						<a class="dropdown-item active" href="#" id="mode-default">Default</a>
 						<a class="dropdown-item" href="#" id="mode-oneSpec">One Special</a>
@@ -53,6 +53,13 @@
 				<br>
 				<div class='form-group'>
 					<button type="submit" class="btn btn-primary submit">show roles</button>
+				</div>
+				<!-- Names dropdown (start screen only)-->
+				<div class="dropdown form-group enter-player-names">
+					<button class="btn btn-secondary dropdown-toggle" type="button" id="enter-player-names-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						player names
+					</button>
+					<div class="dropdown-menu" id='names' aria-labelledby="enter-player-names-button"></div>
 				</div>
 			</form>
 
@@ -79,7 +86,7 @@
 				game.</label>
 			</div>
 
-			<!-- Dark mode button -->
+			<!-- Dark mode button (goes in the bottom right) -->
 			<button class="btn btn-dark dark-mode-btn">dark mode! 😎</button>
 		</main>
 
