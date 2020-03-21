@@ -1,8 +1,5 @@
-* {
-	font-family: 'Fira Code', monospace;
-}
-
 body {
+	font-family: 'Fira Code', monospace;
 	padding: 5%;
 	align-content: center;
 	text-align: center;
@@ -45,6 +42,10 @@ input.dark-mode {
 	position: fixed;
 	right: 10px;
 	bottom: 10px;
+}
+
+.greeting {
+	font-size: 18px;
 }
 
 #innocent {

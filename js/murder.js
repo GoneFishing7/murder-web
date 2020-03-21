@@ -77,6 +77,7 @@ $(document).ready(function () {
 	}
 
 	function revealRoles() {
+		updateGreeting(0);
 		$(".reveal").show();
 	}
 
@@ -125,11 +126,11 @@ $(document).ready(function () {
 	$("#reveal-btn").on('click', function () {
 		if (currentRole < numPlayers) { // If we aren't done yet
 			if (!revealed) { // If we haven't revealed it yet
-				$(".reveal-msg").remove(); // Get rid of the old reveal message
+				$(".reveal-msg").empty(); // Get rid of the old reveal message
 
 				// Add a reveal message
-				$(".reveal").prepend("<p class='reveal-msg'>Your role is <span class='role' id='" +
-					rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!</p>");
+				$(".reveal-msg").html("Your role is <span class='role' id='" +
+					rolesArr[currentRole].toLowerCase() + "'>" + rolesArr[currentRole] + "</span>!");
 
 				// Get others that have the same role
 				let others = getAllOfRoleExcept(rolesArr[currentRole], currentRole);
@@ -156,6 +157,8 @@ $(document).ready(function () {
 				$(".reveal-msg").html("<br>");
 				// Update the reveal label
 				$("#reveal-lbl").html("☝<br>click this to reveal your role!");
+				// Update the greeting
+				updateGreeting(currentRole);
 			}
 		} else {
 			// We're done
@@ -251,6 +254,17 @@ $(document).ready(function () {
 			}
 		});
 		console.log(names);
+	}
+	/**
+	 * Update the greeting message
+	 */
+	function updateGreeting(user) {
+		let $greeting = $(".greeting");
+		if (names[user]) {
+			$greeting.text(`Hi, ${names[user]}!`);
+		} else {
+			$greeting.text('Hello!')
+		}
 	}
 
 	/**
