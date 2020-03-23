@@ -15,21 +15,22 @@ $(document).ready(function () {
     function updateMode() {
         let $darkModeBtn = $(".dark-mode-btn");
         mode = localStorage.getItem("mode");
-        console.log(mode)
         if (mode == 'dark') {
             $darkModeBtn.text("light mode! 🌞");
             $darkModeBtn.removeClass("btn-dark")
                 .addClass("btn-light");
-            $("body").addClass("dark-mode");
-            $("hr").addClass("dark-mode");
-            $("input").addClass("dark-mode");
+            for (let index = 0; index < MODE_TOGGLING_ELEMENTS.length; index++) {
+                const element = MODE_TOGGLING_ELEMENTS[index];
+                $(element).addClass("dark-mode");
+            }
         } else {
             $darkModeBtn.text("dark mode! 😎");
             $darkModeBtn.removeClass("btn-light")
                 .addClass("btn-dark");
-            $("body").removeClass("dark-mode");
-            $("hr").removeClass("dark-mode");
-            $("input").removeClass("dark-mode");
+            for (let index = 0; index < MODE_TOGGLING_ELEMENTS.length; index++) {
+                const element = MODE_TOGGLING_ELEMENTS[index];
+                $(element).removeClass("dark-mode");
+            }
         }
     }
 });
