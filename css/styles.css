@@ -56,10 +56,19 @@ input.dark-mode {
 	color: red;
 }
 
-#detective {
+#sheriff {
 	color: skyblue;
 }
 
 #players {
 	font-family: 'Indie Flower', cursive;
+}
+
+/* 404 Not Found Picture */
+#fof {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+	height: auto;
 }

@@ -8,7 +8,7 @@ $(document).ready(function () {
 	var mode = 'default'; // Can be default or oneSpec
 	var currentRole = 0; // Only for revealing
 	var revealed = false; // Check if current role has been revealed
-	const POSSIBLE_ROLES = ['Innocent', 'Detective', 'Murderer']; // Persistent after reset
+	const POSSIBLE_ROLES = ['Innocent', 'Sheriff', 'Murderer']; // Persistent after reset
 	const MIN = POSSIBLE_ROLES.length; // Persistent after reset
 	const MAX = POSSIBLE_ROLES.length * 5; // Persistent after reset
 	var names = {} // Persistent after reset
@@ -300,5 +300,9 @@ $(document).ready(function () {
 		$(".reveal-msg").html("<br>");
 		// Update the reveal label
 		$("#reveal-lbl").html("☝<br>click this to reveal your role!");
+	}
+	
+	window.onerror = function() {
+		message("danger", "That's not good!", "An error happened!")
 	}
 });
