@@ -1,5 +1,7 @@
+@import './variables';
+
 body {
-	font-family: 'Fira Code', monospace;
+	font-family: $monospace-font;
 	padding: 5%;
 	align-content: center;
 	text-align: center;
@@ -12,19 +14,18 @@ label {
 
 input {
 	text-align: center;
+	.dark-mode {
+		background-color: $dark-mode-background-color;
+		border-color: white;
+		color: $dark-mode-font-color;
+		font-weight: bold;
+	}
 }
 
 .dark-mode {
-	background-color: #222;
-	color: #e6e6e6;
-	border-color: #e6e6e6;
-}
-
-input.dark-mode {
-	background-color: #222;
-	border-color: white;
-	color: #e6e6e6;
-	font-weight: bold;
+	background-color: $dark-mode-background-color;
+	color: $dark-mode-font-color;
+	border-color: $dark-mode-font-color;
 }
 
 .reveal-msg,
@@ -49,15 +50,15 @@ input.dark-mode {
 }
 
 #innocent {
-	color: green;
+	color: $innocent-color;
 }
 
 #murderer {
-	color: red;
+	color: $murderer-color;
 }
 
 #sheriff {
-	color: skyblue;
+	color: $sheriff-color;
 }
 
 #players {
