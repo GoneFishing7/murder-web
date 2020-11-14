@@ -1,111 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-	<head>
-		<!-- Required meta tags -->
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="css/bootstrap.css" />
 
-		<!-- Bootstrap -->
-		<link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Fira Code and Indie Flower -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Fira+Code:300|Indie+Flower&display=swap"
+      rel="stylesheet"
+    />
 
-		<!-- Fira Code and Indie Flower -->
-		<link href="https://fonts.googleapis.com/css?family=Fira+Code:300|Indie+Flower&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.min.css" />
 
-		<!-- Custom CSS -->
-		<link rel="stylesheet" href="css/styles.min.css">
+    <title>Murder Mystery Roles Generator</title>
 
-		<title>Murder Mystery Roles Generator</title>
+    <!-- Favicon Stuff -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="favicons/site.webmanifest" />
+    <link
+      rel="mask-icon"
+      href="favicons/safari-pinned-tab.svg"
+      color="#5bbad5"
+    />
+    <link rel="shortcut icon" href="favicons/favicon.ico" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="msapplication-config" content="favicons/browserconfig.xml" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
 
-		<!-- Favicon Stuff -->
-		<link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
-		<link rel="manifest" href="favicons/site.webmanifest">
-		<link rel="mask-icon" href="favicons/safari-pinned-tab.svg" color="#5bbad5">
-		<link rel="shortcut icon" href="favicons/favicon.ico">
-		<meta name="msapplication-TileColor" content="#da532c">
-		<meta name="msapplication-config" content="favicons/browserconfig.xml">
-		<meta name="theme-color" content="#ffffff">
-	</head>
+  <body>
+    <h1>the murder mystery roles generator.</h1>
+    <hr />
+    <main>
+      <noscript>Yeah, you're gonna want JavaScript enabled... 😁</noscript>
+      <form class="enter-num-players form-horizontal" novalidate>
+        <br />
+        <div class="form-group">
+          <label for="players">There are </label>
+          <input type="number" id="players" min="1" max="99" value="5" />
+          <label for="players"> players!</label>
+        </div>
+        <div class="dropdown from-group">
+          <button
+            class="btn btn-success dropdown-toggle"
+            type="button"
+            id="dropdownMenuButton"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            select mode
+          </button>
+          <div class="dropdown-menu mode" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item active" href="#" id="mode-default"
+              >Default</a
+            >
+            <a class="dropdown-item" href="#" id="mode-oneSpec">One Special</a>
+            <a class="dropdown-item" href="#" id="mode-oneSpec">One Special</a>
+          </div>
+        </div>
+        <br />
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary submit">
+            show roles
+          </button>
+        </div>
+        <!-- Names dropdown (start screen only)-->
+        <div class="dropdown form-group enter-player-names">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            id="enter-player-names-button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            player names
+          </button>
+          <div
+            class="dropdown-menu"
+            id="names"
+            aria-labelledby="enter-player-names-button"
+          ></div>
+        </div>
+      </form>
 
-	<body>
-		<h1>the murder mystery roles generator.</h1>
-		<hr>
-		<main>
-			<noscript>Yeah, you're gonna want JavaScript enabled... 😁</noscript>
-			<form class="enter-num-players form-horizontal" novalidate>
-				<br>
-				<div class='form-group'>
-					<label for='players'>There are </label>
-					<input type="number" id="players" min="1" max="99" value="5">
-					<label for="players"> players!</label>
-				</div>
-				<div class="dropdown from-group">
-					<button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					select mode
-					</button>
-					<div class="dropdown-menu mode" aria-labelledby="dropdownMenuButton">
-						<a class="dropdown-item active" href="#" id="mode-default">Default</a>
-						<a class="dropdown-item" href="#" id="mode-oneSpec">One Special</a>
-					</div>
-				</div>
-				<br>
-				<div class='form-group'>
-					<button type="submit" class="btn btn-primary submit">show roles</button>
-				</div>
-				<!-- Names dropdown (start screen only)-->
-				<div class="dropdown form-group enter-player-names">
-					<button class="btn btn-secondary dropdown-toggle" type="button" id="enter-player-names-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						player names
-					</button>
-					<div class="dropdown-menu" id='names' aria-labelledby="enter-player-names-button"></div>
-				</div>
-			</form>
+      <!-- Reveal button -->
+      <div class="reveal" style="display: none">
+        <p class="greeting">Hi!</p>
+        <p class="reveal-msg"><br /></p>
+        <button class="btn btn-success" id="reveal-btn">reveal</button>
+        <br />
+        <label id="reveal-lbl" for="reveal-btn"
+          >☝<br />click this to reveal your role!</label
+        >
+      </div>
 
-			<!-- Reveal button -->
-			<div class='reveal' style="display: none">
-				<p class='greeting'>Hi!</p>
-				<p class='reveal-msg'><br></p>
-				<button class='btn btn-success' id='reveal-btn'>reveal</button>
-				<br>
-				<label id='reveal-lbl' for='reveal-btn'>☝<br>click this to reveal your role!</label>
-			</div>
+      <!-- Finished message -->
+      <div id="finish" style="display: none">
+        <p class="finish-msg">
+          all players have roles. prepare to start round.
+        </p>
+        <button class="btn btn-success" id="finish-btn">done</button>
+        <br />
+        <label id="finish-lbl" for="finish-btn"
+          >☝<br />click this to finish role assignment!</label
+        >
+      </div>
 
-			<!-- Finished message -->
-			<div id='finish' style="display: none;">
-				<p class='finish-msg'>all players have roles. prepare to start round.</p>
-				<button class='btn btn-success' id='finish-btn'>done</button>
-				<br>
-				<label id='finish-lbl' for='finish-btn'>☝<br>click this to finish role assignment!</label>
-			</div>
+      <!-- Play again button (hidden until #finish-btn has been presssed)-->
+      <div id="new-game" style="display: none">
+        <button class="btn btn-success" id="new-game-btn">new game</button
+        ><br />
+        <label id="new-game-lbl" for="new-game-btn"
+          >☝<br />click this to reload assignments and start a new game.</label
+        >
+      </div>
 
-			<!-- Play again button (hidden until #finish-btn has been presssed)-->
-			<div id='new-game' style="display: none;">
-				<button class='btn btn-success' id='new-game-btn'>new game</button><br>
-				<label id='new-game-lbl' for='new-game-btn'>☝<br>click this to reload assignments and start a new
-				game.</label>
-			</div>
+      <!-- Dark mode button (goes in the bottom right) -->
+      <button class="btn btn-dark dark-mode-btn">dark mode! 😎</button>
+    </main>
 
-			<!-- Dark mode button (goes in the bottom right) -->
-			<button class="btn btn-dark dark-mode-btn">dark mode! 😎</button>
-		</main>
+    <!-- jQuery-->
+    <script src="js/jquery-3.4.1.min.js"></script>
 
-		<!-- jQuery-->
-		<script src="js/jquery-3.4.1.min.js"></script>
+    <!-- Popper.js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Bootstrap -->
+    <script src="js/bootstrap.js"></script>
 
-		<!-- Popper.js -->
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-		</script>
-		<!-- Bootstrap -->
-		<script src="js/bootstrap.js"></script>
+    <!-- Message JS -->
+    <script src="js/message.js"></script>
 
-		<!-- Message JS -->
-		<script src="js/message.js"></script>
-
-		<!-- Custom JS -->
-		<script src="js/murder.js"></script>
-		<script src="js/dark-mode.js"></script>
-	</body>
-
+    <!-- Custom JS -->
+    <script src="js/murder.js"></script>
+    <script src="js/dark-mode.js"></script>
+  </body>
 </html>
